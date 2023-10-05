@@ -1,5 +1,5 @@
 import { gradosSeleccionados } from "./eventos";
-import { crearTarjetaTiempo, desactivarOverlay, mostrarVentanaError } from "./elementosDOM";
+import { crearTarjetaPrevision, crearTarjetaTiempo, desactivarOverlay, mostrarVentanaError } from "./elementosDOM";
 
 const claveAPI = "b819efaed2101d40c74f6cb81dd7e293";
 const idiomaUsuario = navigator.language.substring(0, 2) || navigator.userLanguage.substring(0, 2);
@@ -19,6 +19,8 @@ async function obtenerTiempo(ciudad){
             const lon = ciudadJson[0].lon;
             
             const tiempo = await obtenerDatos(lat, lon);
+            //const prevision = await obtenerPrevision(tiempo.name);
+
             const misDatos = {
                 city: tiempo.name,
                 estadoClima: tiempo.weather[0].main,
@@ -39,13 +41,13 @@ async function obtenerTiempo(ciudad){
     //MANEJO DE ERRORES, ALGO HA IDO MAL CON LA REQUEST
     else{
         if(ciudadObtenida.status == "401"){
-            console.log("Fallo en la clave API")
+            mostrarVentanaError("Fallo con la clave API");
         }
         if(ciudadObtenida.status == "429"){
-            console.log("Límite de solicitudes a la API excedido")
+            mostrarVentanaError("Límite de solicitudes a la API excedido");
         }
         if(ciudadObtenida.status == "500" || ciudadObtenida.status == "502" || ciudadObtenida.status == "503" || ciudadObtenida.status == "504"){
-            console.log("Problema con openweathermap.org")
+            mostrarVentanaError("Problema con OpenWeatherMap.org");
         }
         
     }
@@ -61,6 +63,41 @@ async function obtenerDatos(latitud, longitud){
 async function obtenerIcono(codigoIcono){
     const url = "https://openweathermap.org/img/wn/" + codigoIcono + "@2x.png";
     return url;
+}
+
+async function obtenerPrevision(ciudad) {
+    //NO FUNCIONA LA PREVISION PORQUE LA API NO ENCUENTRA BIEN CIUDADES COMO ALICANTE O PETRER
+    /*
+    const url = "http://api.weatherapi.com/v1/forecast.json?key=58eff98293694f7d81981642230310 &q=" + ciudad + "&days=3&aqi=no&alerts=no"
+    const datosPrevision = await fetch(url, { mode: "cors" });
+    const datosPrevisionJson = await datosPrevision.json();
+    const previsionDia1 = datosPrevisionJson.forecast.forecastday[1];
+    const previsionDia2 = datosPrevisionJson.forecast.forecastday[2];
+    const datosDia1 = {
+        fecha: previsionDia1.date,
+        temp: previsionDia1.day.avgtemp_c,
+        minTemp: previsionDia1.day.mintemp_c,
+        maxTemp: previsionDia1.day.maxtemp_c,
+        estadoClima: previsionDia1.day.condition.text,
+        icono: previsionDia1.day.condition.icon,
+    };
+    const datosDia2 = {
+        fecha: previsionDia2.date,
+        temp: previsionDia2.day.avgtemp_c,
+        minTemp: previsionDia2.day.mintemp_c,
+        maxTemp: previsionDia2.day.maxtemp_c,
+        estadoClima: previsionDia2.day.condition.text,
+        icono: previsionDia2.day.condition.icon,
+    };
+    
+    
+    crearTarjetaPrevision(datosDia1);
+    crearTarjetaPrevision(datosDia2);
+    
+    console.log(previsionDia1);
+    console.log(previsionDia2);
+    */
+    
 }
 
 export {obtenerTiempo, idiomaUsuario};

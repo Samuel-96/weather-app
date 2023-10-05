@@ -1,5 +1,5 @@
 import {obtenerTiempo } from "./api";
-import { limpiarInfoTiempo, mostrarLoader, ocultarLoader, cerrarVentanaError, desactivarOverlay } from "./elementosDOM";
+import { limpiarInfoTiempo, mostrarLoader, ocultarLoader, cerrarVentanaError, desactivarOverlay, mostrarVentanaError, limpiarInfoPrevision } from "./elementosDOM";
 
 const inputCiudad = document.querySelector("#input-ciudad");
 const imgBuscarCiudad = document.querySelector("#buscar-ciudad");
@@ -20,10 +20,13 @@ function añadirEventos(){
         if (ciudadComprobada.valido) {
             mostrarLoader();
             limpiarInfoTiempo();
+            limpiarInfoPrevision();
             try {
                 await obtenerTiempo(ciudadComprobada.ciudad);
             } catch (error) {
-              console.error('Error al obtener el tiempo:', error);
+              mostrarVentanaError("Error al obtener el tiempo, por favor inténtelo otra vez.");
+              console.error(error);
+            
             } finally {
               ocultarLoader();      
             }
@@ -83,10 +86,8 @@ function añadirEventos(){
 function comprobarCiudadIntroducida(){
     const ciudad = inputCiudad.value.trim();
     if(ciudad === ""){
-        console.log("vacio");
         return {ciudad: null, valido: false};
     } else{
-        console.log("ciudad introducida: " + ciudad);
         return {ciudad: ciudad, valido: true};
     }
 }

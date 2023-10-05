@@ -8,6 +8,7 @@
 
 html{
   height: 100%;
+  background-color: #00000000;
 }
 
 body {
@@ -17,6 +18,7 @@ body {
   flex-direction: column;
   justify-content: center;
   background-color: #2c2c2c;
+  text-align: center;
   /*
   background: url(../assets/wallpaper.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -56,6 +58,10 @@ nav{
   margin-right: -18px;
   font-size: 50px;
   font-family: 'Open Sans';
+}
+
+.local{
+  color: #000000;
 }
 
 .contenedor-titulo:hover{
@@ -323,6 +329,66 @@ footer img{
   color: white;
   border: none;
   cursor: pointer;
+}
+
+/*PREVISION*/
+.prevision{
+  padding: 0.5em;
+  width: 100%;
+  background-color: #00000000;
+  display: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 100px;
+}
+
+.titulo-prevision{
+  margin: 1em;
+  display: none;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: white;
+  font-family: "Open Sans";
+
+}
+
+.prevision-dia, .prevision-dia-2{
+  padding: 0.5em;
+  background-color: #414141;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 40px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.prevision-dia img, .prevision-dia-2 img{
+  height: 60px;
+  width: 60px;
+}
+
+.previsionMinimaMaxima{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+  gap: 20px;
+  font-size: 30px;
+}
+
+.prevision-fecha{
+  font-size: 20px;
+}
+
+.titulo-prevision{
+  font-size: 30px;
 }
 
 @keyframes spin {

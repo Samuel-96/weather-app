@@ -1,7 +1,6 @@
 import { idiomaUsuario } from "./api";
 
 function crearTarjetaTiempo(misDatosTiempo){
-    console.log(misDatosTiempo);
 
     const infoTiempo = document.querySelector(".info-tiempo"); //Contenedor ppal
 
@@ -83,6 +82,51 @@ function crearTarjetaTiempo(misDatosTiempo){
 
 }
 
+function crearTarjetaPrevision(datosDia){
+    const contPrevisiones = document.querySelector(".prevision");
+    const previsionTitulo = document.querySelector(".titulo-prevision");
+
+    const contenedorPrevisionDia = document.createElement("div");
+    contenedorPrevisionDia.classList.add("prevision-dia");
+
+    const imgIcono = document.createElement("img");
+    imgIcono.src = datosDia.icono;
+    const pEstado = document.createElement("p");
+    pEstado.textContent = datosDia.estadoClima;
+    const pTemp = document.createElement("p");
+    pTemp.textContent = datosDia.temp + "°";
+
+    const divMinimaMaxima = document.createElement("div");
+    divMinimaMaxima.classList.add("previsionMinimaMaxima");
+    const pMinima = document.createElement("p");
+    pMinima.textContent = "Mínima: " + datosDia.minTemp + "°";
+    const pMaxima = document.createElement("p");
+    pMaxima.textContent = "Máxima: " + datosDia.maxTemp + "°";
+
+    divMinimaMaxima.appendChild(pMinima);
+    divMinimaMaxima.appendChild(pMaxima);
+
+    const pFecha = document.createElement("p");
+    pFecha.classList.add("prevision-fecha");
+    datosDia.fecha = datosDia.fecha.substring(5);
+    pFecha.textContent = datosDia.fecha;
+
+    contenedorPrevisionDia.appendChild(imgIcono);
+    contenedorPrevisionDia.appendChild(pEstado);
+    contenedorPrevisionDia.appendChild(pTemp);
+    contenedorPrevisionDia.appendChild(divMinimaMaxima);
+    contenedorPrevisionDia.appendChild(pFecha);
+
+    contPrevisiones.appendChild(contenedorPrevisionDia);
+    previsionTitulo.style.display = "flex";
+    contPrevisiones.style.display = "flex";
+}
+
+function limpiarInfoPrevision(){
+    const contPrevisiones = document.querySelector(".prevision");
+    contPrevisiones.innerHTML = "";
+}
+
 function obtenerDia(){
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -148,4 +192,4 @@ function cerrarVentanaError(){
     desactivarOverlay();
 }
 
-export {crearTarjetaTiempo, desactivarOverlay, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError};
+export {crearTarjetaTiempo, desactivarOverlay, limpiarInfoPrevision, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError, crearTarjetaPrevision};
