@@ -25,33 +25,9 @@
         </div>
     </nav>
 
-    <div class="contenedor-info-tiempo">
+    <div class="contenedor-info-tiempo"> 
         <div class="info-tiempo">
 
-            <div class="info-localizacion">
-                <div class="contenedor-ciudad">
-                    <p class="nombre-ciudad">ALICANTE</p>
-                    <img class="icono-tiempo" src="../src/assets/logo.png" alt="">
-                </div>
-
-                <div class="contenedor-dia">
-                    <p class="dia-semana">Miércoles</p>
-                    <p class="estado-tiempo">Lluvia</p>
-                </div>
-            </div>
-
-            <div class="datos-clima">
-                <div class="contenedor-grados">
-                    <p class="temp-actual">21°</p>
-                </div>
-
-                <div class="contenedor-minima-maxima">
-                    <p class="temp-minima">Mínima: 15°</p>
-                    <p class="temp-maxima">Máxima: 30°</p>
-                </div>
-            </div>
-
-            <p class="hora-actual">17:45</p>
         </div>
     </div>
     
@@ -62,5 +38,12 @@
             <img class="git-logo" src="./resources/github-logo.png"/>
         </a> 
     </footer>
+
+    <div class="loader"></div>
+    <div id="overlay"></div> 
+    <div class="ventana-error">
+        <h1 class="mensaje">No se ha encontrado la ciudad introducida </h1>
+        <button class="cerrar-ventana">Cerrar</button>
+    </div>
 </body>
 </html>

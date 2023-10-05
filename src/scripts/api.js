@@ -1,9 +1,8 @@
 import { gradosSeleccionados } from "./eventos";
-import { crearTarjetaTiempo } from "./elementosDOM";
+import { crearTarjetaTiempo, desactivarOverlay, mostrarVentanaError } from "./elementosDOM";
 
 const claveAPI = "b819efaed2101d40c74f6cb81dd7e293";
 const idiomaUsuario = navigator.language.substring(0, 2) || navigator.userLanguage.substring(0, 2);
-let city, estadoClima, icono, descripcionClima, temperaturaActual, temperaturaMinima, temperaturaMaxima;
 
 async function obtenerTiempo(ciudad){
     const url = "https://api.openweathermap.org/geo/1.0/direct?q=" + ciudad + "&limit=1&appid=" + claveAPI + "";
@@ -20,33 +19,20 @@ async function obtenerTiempo(ciudad){
             const lon = ciudadJson[0].lon;
             
             const tiempo = await obtenerDatos(lat, lon);
-            let misDatos = [];
-            
-            city = tiempo.name; 
-            misDatos.push(city);
-
-            estadoClima = tiempo.weather[0].main;
-            misDatos.push(estadoClima);
-
-            icono = await obtenerIcono(tiempo.weather[0].icon);
-            misDatos.push(icono);
-
-            descripcionClima = tiempo.weather[0].description;
-            misDatos.push(descripcionClima);
-
-            temperaturaActual = tiempo.main.temp;
-            misDatos.push(temperaturaActual);
-
-            temperaturaMinima = tiempo.main.temp_min;
-            misDatos.push(temperaturaMinima);
-
-            temperaturaMaxima = tiempo.main.temp_max;
-            misDatos.push(temperaturaMaxima);
-
-            crearTarjetaTiempo(misDatos);
+            const misDatos = {
+                city: tiempo.name,
+                estadoClima: tiempo.weather[0].main,
+                icono: await obtenerIcono(tiempo.weather[0].icon),
+                descripcionClima: tiempo.weather[0].description,
+                temperaturaActual: tiempo.main.temp,
+                temperaturaMinima: tiempo.main.temp_min,
+                temperaturaMaxima: tiempo.main.temp_max
+              };
+              desactivarOverlay();
+              crearTarjetaTiempo(misDatos);
         } 
         else {
-            console.log("ciudad no encontrada");
+            mostrarVentanaError("No se ha encontrado la ciudad introducida");
         }
         
     } 
@@ -77,4 +63,4 @@ async function obtenerIcono(codigoIcono){
     return url;
 }
 
-export {obtenerTiempo};
+export {obtenerTiempo, idiomaUsuario};
