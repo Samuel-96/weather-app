@@ -1,18 +1,13 @@
 
-# METELOCAL
+# METEOLOCAL
 
 METELOCAL is a web application that allows users to check the weather conditions for any entered city. It also provides the option to use the user's location for auto-detection and display of the corresponding weather conditions.
 
-METELOCAL es una aplicación web que permite a los usuarios consultar las condiciones climáticas de cualquier ciudad ingresada. También ofrece la opción de utilizar la ubicación del usuario para la detección automática y la visualización de las condiciones climáticas correspondientes.
-
-
-
-
+METEOLOCAL es una aplicación web que permite a los usuarios consultar las condiciones climáticas de cualquier ciudad ingresada. También ofrece la opción de utilizar la ubicación del usuario para la detección automática y la visualización de las condiciones climáticas correspondientes.
 
 ## Demo
-
-
 https://samuel-96.github.io/weather-app/
+
 ## Features
 English
 - Location auto-detection
