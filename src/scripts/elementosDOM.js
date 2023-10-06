@@ -192,4 +192,4 @@ function cerrarVentanaError(){
     desactivarOverlay();
 }
 
-export {crearTarjetaTiempo, desactivarOverlay, limpiarInfoPrevision, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError, crearTarjetaPrevision};
+export {crearTarjetaTiempo, activarOverlay, desactivarOverlay, limpiarInfoPrevision, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError, crearTarjetaPrevision};

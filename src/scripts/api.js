@@ -1,8 +1,10 @@
 import { gradosSeleccionados } from "./eventos";
-import { crearTarjetaPrevision, crearTarjetaTiempo, desactivarOverlay, mostrarVentanaError } from "./elementosDOM";
+import { crearTarjetaPrevision, activarOverlay, crearTarjetaTiempo, desactivarOverlay, mostrarLoader, mostrarVentanaError, ocultarLoader } from "./elementosDOM";
+import { ubicacion } from ".";
 
 const claveAPI = "b819efaed2101d40c74f6cb81dd7e293";
 const idiomaUsuario = navigator.language.substring(0, 2) || navigator.userLanguage.substring(0, 2);
+let latitud, longitud;
 
 async function obtenerTiempo(ciudad){
     const url = "https://api.openweathermap.org/geo/1.0/direct?q=" + ciudad + "&limit=1&appid=" + claveAPI + "";
@@ -53,6 +55,38 @@ async function obtenerTiempo(ciudad){
     }
 }
 
+async function obtenerLocalizacion(){
+    const successCallback = async (position) => {
+        latitud = position.coords.latitude;
+        longitud = position.coords.longitude;
+        console.log(latitud, longitud);
+        const datosTiempo = await obtenerDatos(latitud, longitud);
+        const misDatos = {
+            city: datosTiempo.name,
+            estadoClima: datosTiempo.weather[0].main,
+            icono: await obtenerIcono(datosTiempo.weather[0].icon),
+            descripcionClima: datosTiempo.weather[0].description,
+            temperaturaActual: datosTiempo.main.temp,
+            temperaturaMinima: datosTiempo.main.temp_min,
+            temperaturaMaxima: datosTiempo.main.temp_max
+          };
+          ocultarLoader();
+          desactivarOverlay();
+          crearTarjetaTiempo(misDatos);
+          
+      };
+      
+      const errorCallback = (error) => {
+        ocultarLoader();
+        desactivarOverlay();
+        return;
+      };
+      activarOverlay();
+      mostrarLoader();
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+      
+}
+
 async function obtenerDatos(latitud, longitud){
     const url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitud + "&lon=" + longitud + "&appid=" + claveAPI + "&lang=" + idiomaUsuario + "&units=" + gradosSeleccionados + "";
     const datosTiempo = await fetch(url, {mode: 'cors'});
@@ -100,4 +134,4 @@ async function obtenerPrevision(ciudad) {
     
 }
 
-export {obtenerTiempo, idiomaUsuario};
+export {obtenerLocalizacion, obtenerTiempo, idiomaUsuario};
