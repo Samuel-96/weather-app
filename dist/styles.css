@@ -1,0 +1,686 @@
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700&family=Roboto:wght@400;500;700&display=swap);
+/* ------------------------------
+   VARIABLES Y REINICIO
+------------------------------ */
+
+:root {
+    font-family: "Roboto", system-ui, sans-serif;
+    color: #292d32;
+    background-color: #f4f5f6;
+
+    --color-primary: #292d32;
+    --color-primary-hover: #41474e;
+
+    --color-background: #fafafa;
+    --color-surface: #fafafa;
+    --color-surface-light: #e8eaed;
+
+    --color-accent: #e5a85b;
+    --color-text: #292d32;
+    --color-text-dark: #292d32;
+    --color-error: #c65e5e;
+
+    --border-color: #dfe2e6;
+    --border-radius: 10px;
+    --transition: 0.2s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(ellipse at top, #ffffff 0%, transparent 65%),
+        var(--color-background);
+    color: var(--color-text);
+    text-align: center;
+}
+
+/* ------------------------------
+   CABECERA
+------------------------------ */
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 5%;
+    background-color: rgb(16 24 39 / 75%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.contenedor-titulo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: var(--border-radius);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.contenedor-titulo:hover {
+    background-color: #ffffff0d;
+}
+
+.contenedor-titulo h1 {
+    font-family: "Open Sans", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3.1rem);
+    font-weight: 700;
+    letter-spacing: -2px;
+}
+
+.contenedor-titulo .local {
+    color: var(--color-accent);
+}
+
+#logo-web {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+/* ------------------------------
+   BUSCADOR
+------------------------------ */
+
+.barra-buscadora {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 2px;
+    border-radius: 12px;
+    background-color: var(--color-surface);
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.barra-buscadora:focus-within {
+    box-shadow: 0 0 0 3px #55c6e822;
+}
+
+.barra-buscadora input {
+    width: min(260px, 55vw);
+    padding: 5px;
+    border: none;
+    background: transparent;
+    color: var(--color-text);
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+}
+
+.barra-buscadora input::placeholder {
+    color: #9aaac0;
+    opacity: 1;
+}
+
+#buscar-ciudad {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+
+#buscar-ciudad:hover {
+    transform: scale(1.12);
+}
+
+.contenedor-buscador {
+    position: relative;
+}
+
+.resultados-busqueda {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+    overflow: hidden;
+    display: none;
+}
+
+.opcion-ciudad {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: var(--color-text);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--transition);
+}
+
+.opcion-ciudad:hover,
+.opcion-ciudad:focus-visible {
+    background-color: var(--color-surface-light);
+}
+
+.nombre-ciudad {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.detalles-ciudad {
+    margin-top: 3px;
+    color: #737980;
+    font-size: 0.8rem;
+}
+
+/* ------------------------------
+   SELECTOR DE UNIDADES
+------------------------------ */
+
+.cambiar-unidades {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.grados,
+.grados-inactivo,
+.grados-activo {
+    width: 50px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.grados,
+.grados-inactivo {
+    background-color: var(--color-surface);
+    color: #b9c8da;
+}
+
+.grados-activo {
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+}
+
+.grados:hover,
+.grados-inactivo:hover,
+.grados-activo:hover {
+    transform: translateY(-2px);
+}
+
+/* ------------------------------
+   INFORMACIÓN METEOROLÓGICA
+------------------------------ */
+
+.contenedor-info-tiempo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 40px 20px 20px;
+}
+
+.info-tiempo {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 750px);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    background-color: var(--color-surface);
+    box-shadow: 0 15px 40px #00000015;
+}
+
+/* Localización */
+
+.info-localizacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 22px 28px;
+}
+
+.nombre-ciudad {
+    color: var(--color-text);
+    font-family: "Open Sans", sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.dia-semana {
+    color: #737980;
+    font-size: 1rem;
+}
+
+/* Temperatura principal */
+
+.datos-clima {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 15px 28px 25px;
+    background-color: var(--color-surface);
+}
+
+.contenedor-temperatura {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0 25px;
+}
+
+.icono-tiempo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.temp-actual {
+    color: var(--color-text);
+    font-family: "Open Sans", sans-serif;
+    font-size: clamp(4rem, 10vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.estado-tiempo {
+    width: 100%;
+    color: #737980;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+}
+
+/* Detalles inferiores */
+
+.contenedor-detalles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 10px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.temp-minima,
+.temp-maxima,
+.hora-actual {
+    color: #626970;
+    font-size: 0.95rem;
+}
+
+
+/* ------------------------------
+   PREVISIÓN
+------------------------------ */
+
+.titulo-prevision {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 15px;
+    color: var(--color-text);
+    font-family: "Open Sans", sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    text-align: center;
+}
+
+.prevision {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 15px;
+}
+
+.prevision-dia,
+.prevision-dia-2 {
+    display: flex;
+    flex: 1 1 220px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    max-width: 260px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.1rem;
+    transition:
+        transform var(--transition),
+        background-color var(--transition),
+        border-color var(--transition);
+}
+
+.prevision-dia:hover,
+.prevision-dia-2:hover {
+    transform: translateY(-4px);
+    background-color: var(--color-surface-light);
+    border-color: var(--color-accent);
+}
+
+.prevision-dia img,
+.prevision-dia-2 img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.previsionMinimaMaxima {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+.prevision-fecha {
+    font-size: 0.9rem;
+    color: #9aacc2;
+}
+
+/* ------------------------------
+   FOOTER
+------------------------------ */
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+    padding: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background-color: #e8eaed;
+    border-top: 1px solid var(--border-color);
+    color: #41474e;
+}
+
+footer a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer img {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+
+footer img:hover {
+    transform: scale(1.12);
+}
+
+/* ------------------------------
+   OVERLAY, LOADER Y ERRORES
+------------------------------ */
+
+#overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    background-color: rgb(0 0 0 / 55%);
+    z-index: 10;
+}
+
+.loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 11;
+    width: 65px;
+    height: 65px;
+    border: 8px solid;
+    border-radius: 50%;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+    animation: spin 1s linear infinite;
+    border-color: #e8eaed;
+    border-top-color: var(--color-accent);
+}
+
+.ventana-error {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: min(90%, 420px);
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    background-color: var(--color-surface);
+    color: var(--color-error);
+    font-family: "Open Sans", sans-serif;
+    visibility: hidden;
+    box-shadow: 0 20px 60px #00000070;
+    transform: translate(-50%, -50%);
+}
+
+.mensaje {
+    font-size: 1.25rem;
+    overflow-wrap: anywhere;
+}
+
+.cerrar-ventana {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-primary-hover);
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+        background-color var(--transition),
+        color var(--transition);
+}
+
+.cerrar-ventana:hover {
+    background-color: var(--color-accent);
+    color: var(--color-text-dark);
+}
+
+/* ------------------------------
+   ANIMACIONES
+------------------------------ */
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* ------------------------------
+   RESPONSIVE: TABLETS
+------------------------------ */
+
+@media (max-width: 900px) {
+    nav {
+        justify-content: center;
+    }
+
+    .contenedor-ciudad,
+    .contenedor-dia {
+        gap: 10px;
+    }
+}
+
+/* ------------------------------
+   RESPONSIVE: MÓVILES
+------------------------------ */
+
+@media (max-width: 767px) {
+    nav {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .contenedor-titulo {
+        padding: 5px;
+    }
+
+    .contenedor-titulo h1 {
+        font-size: 2.2rem;
+    }
+
+    #logo-web {
+        width: 42px;
+        height: 42px;
+    }
+
+    .barra-buscadora {
+        width: min(100%, 320px);
+    }
+
+    .barra-buscadora input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .contenedor-info-tiempo {
+        padding: 25px 12px 15px;
+    }
+
+    .info-localizacion {
+        padding: 10px;
+    }
+
+    .contenedor-ciudad,
+    .contenedor-dia {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .contenedor-ciudad img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .datos-clima {
+        gap: 15px;
+        padding: 15px 10px;
+    }
+
+    .contenedor-minima-maxima {
+        padding: 10px;
+    }
+
+    .hora-actual {
+        font-size: 1rem;
+    }
+
+    .prevision {
+        gap: 12px;
+    }
+
+    .prevision-dia,
+    .prevision-dia-2 {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
+        max-width: 350px;
+    }
+
+    footer {
+        font-size: 0.85rem;
+    }
+
+    .contenedor-info-tiempo {
+        padding: 25px 12px 15px;
+    }
+
+    .info-localizacion {
+        flex-direction: column;
+        gap: 5px;
+        padding: 18px;
+    }
+
+    .datos-clima {
+        padding: 10px 15px 20px;
+    }
+
+    .contenedor-temperatura {
+        gap: 5px;
+    }
+
+    .icono-tiempo {
+        width: 75px;
+        height: 75px;
+    }
+
+    .contenedor-detalles {
+        justify-content: center;
+        gap: 12px 20px;
+        padding-top: 15px;
+    }
+}
+
+/* ------------------------------
+   ACCESIBILIDAD
+------------------------------ */
+
+button:focus-visible,
+input:focus-visible,
+.contenedor-titulo:focus-visible {
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
