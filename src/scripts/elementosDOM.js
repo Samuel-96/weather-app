@@ -1,88 +1,117 @@
 import { idiomaUsuario } from "./api";
 
-function crearTarjetaTiempo(misDatosTiempo){
+const contenedorResultados = document.querySelector(".resultados-busqueda");
 
-    const infoTiempo = document.querySelector(".info-tiempo"); //Contenedor ppal
+function crearTarjetaTiempo(misDatosTiempo) {
+
+    const infoTiempo = document.querySelector(".info-tiempo");
+
+    // Limpiamos la tarjeta anterior
+    infoTiempo.replaceChildren();
+
+    // --------------------------------
+    // LOCALIZACIÓN
+    // --------------------------------
 
     const infoLocalizacion = document.createElement("div");
     infoLocalizacion.classList.add("info-localizacion");
 
-    const contenedorCiudad = document.createElement("div");
-    contenedorCiudad.classList.add("contenedor-ciudad");
-
     const pNombreCiudad = document.createElement("p");
     pNombreCiudad.classList.add("nombre-ciudad");
-    pNombreCiudad.textContent = misDatosTiempo.city;
-    const imagenTiempo = document.createElement("img");
-    imagenTiempo.classList.add("icono-tiempo");
-    imagenTiempo.src = misDatosTiempo.icono;
-    
-    contenedorCiudad.appendChild(pNombreCiudad);
-    contenedorCiudad.appendChild(imagenTiempo);
+    pNombreCiudad.textContent = misDatosTiempo.nombreCiudad || misDatosTiempo.city;
 
-    const contenedorDia = document.createElement("div");
-    contenedorDia.classList.add("contenedor-dia");
+    const pUbicacion = document.createElement("p");
+    pUbicacion.classList.add("ubicacion-secundaria");
+
+    const nombresPaises = new Intl.DisplayNames(["es"], {
+        type: "region"
+    });
+
+    const nombrePais = misDatosTiempo.pais
+        ? nombresPaises.of(misDatosTiempo.pais)
+        : null;
+
+    const detallesUbicacion = [
+        misDatosTiempo.region,
+        nombrePais
+    ].filter(Boolean);
+
+    pUbicacion.textContent = detallesUbicacion.join(", ");
 
     const pDiaSemana = document.createElement("p");
-    pDiaSemana.classList.add("dia-semana")
+    pDiaSemana.classList.add("dia-semana");
     pDiaSemana.textContent = obtenerDia();
-    const pTiempo = document.createElement("p");
-    pTiempo.classList.add("estado-tiempo");
-    pTiempo.textContent = misDatosTiempo.descripcionClima;
 
-    contenedorDia.appendChild(pDiaSemana);
-    contenedorDia.appendChild(pTiempo);
+    infoLocalizacion.append(
+        pNombreCiudad,
+        pUbicacion,
+        pDiaSemana
+    );
 
-    infoLocalizacion.appendChild(contenedorCiudad);
-    infoLocalizacion.appendChild(contenedorDia);
-
-    //parte de las temperaturas
+    // --------------------------------
+    // TEMPERATURA PRINCIPAL
+    // --------------------------------
 
     const datosClima = document.createElement("div");
     datosClima.classList.add("datos-clima");
 
-    const contenedorGrados = document.createElement("div");
-    contenedorGrados.classList.add("contenedor-grados");
+    const contenedorTemperatura = document.createElement("div");
+    contenedorTemperatura.classList.add("contenedor-temperatura");
+
+    const imagenTiempo = document.createElement("img");
+    imagenTiempo.classList.add("icono-tiempo");
+    imagenTiempo.src = misDatosTiempo.icono;
+    imagenTiempo.alt = misDatosTiempo.descripcionClima;
 
     const pTemperaturaActual = document.createElement("p");
     pTemperaturaActual.classList.add("temp-actual");
-    misDatosTiempo.temperaturaActual = String(misDatosTiempo.temperaturaActual);
-    misDatosTiempo.temperaturaActual = misDatosTiempo.temperaturaActual.substring(0,2)
-    pTemperaturaActual.textContent = misDatosTiempo.temperaturaActual + "°";
+    pTemperaturaActual.textContent =
+        `${Math.round(misDatosTiempo.temperaturaActual)}°`;
 
-    contenedorGrados.appendChild(pTemperaturaActual);
+    const pEstadoTiempo = document.createElement("p");
+    pEstadoTiempo.classList.add("estado-tiempo");
+    pEstadoTiempo.textContent = misDatosTiempo.descripcionClima;
 
-    const contenedorMinimasMaximas = document.createElement("div");
-    contenedorMinimasMaximas.classList.add("contenedor-minima-maxima");
+    contenedorTemperatura.append(
+        imagenTiempo,
+        pTemperaturaActual,
+        pEstadoTiempo
+    );
+
+    // --------------------------------
+    // DETALLES: MÍNIMA, MÁXIMA Y HORA
+    // --------------------------------
+
+    const contenedorDetalles = document.createElement("div");
+    contenedorDetalles.classList.add("contenedor-detalles");
 
     const pMinima = document.createElement("p");
     pMinima.classList.add("temp-minima");
-    misDatosTiempo.temperaturaMinima = String(misDatosTiempo.temperaturaMinima);
-    misDatosTiempo.temperaturaMinima = misDatosTiempo.temperaturaMinima.substring(0,2);
-    pMinima.textContent = "Mínima: " + misDatosTiempo.temperaturaMinima + "°";
+    pMinima.textContent =
+        `Mínima: ${Math.round(misDatosTiempo.temperaturaMinima)}°`;
+
     const pMaxima = document.createElement("p");
     pMaxima.classList.add("temp-maxima");
-    misDatosTiempo.temperaturaMaxima = String(misDatosTiempo.temperaturaMaxima);
-    misDatosTiempo.temperaturaMaxima = misDatosTiempo.temperaturaMaxima.substring(0,2);
-    pMaxima.textContent = "Máxima: " + misDatosTiempo.temperaturaMaxima + "°";
-
-    contenedorMinimasMaximas.appendChild(pMinima);
-    contenedorMinimasMaximas.appendChild(pMaxima);
-
-    datosClima.appendChild(contenedorGrados);
-    datosClima.appendChild(contenedorMinimasMaximas);
+    pMaxima.textContent =
+        `Máxima: ${Math.round(misDatosTiempo.temperaturaMaxima)}°`;
 
     const pHora = document.createElement("p");
     pHora.classList.add("hora-actual");
-    pHora.textContent = obtenerHora();
+    pHora.textContent = `Actualizado: ${obtenerHora()}`;
 
-    infoTiempo.appendChild(infoLocalizacion);
-    infoTiempo.appendChild(datosClima);
-    infoTiempo.appendChild(pHora);
+    contenedorDetalles.append(pMinima, pMaxima, pHora);
 
+    // --------------------------------
+    // MONTAJE DE LA TARJETA
+    // --------------------------------
+
+    datosClima.append(contenedorTemperatura, contenedorDetalles);
+
+    infoTiempo.append(infoLocalizacion, datosClima);
 }
 
-function crearTarjetaPrevision(datosDia){
+
+function crearTarjetaPrevision(datosDia) {
     const contPrevisiones = document.querySelector(".prevision");
     const previsionTitulo = document.querySelector(".titulo-prevision");
 
@@ -122,12 +151,12 @@ function crearTarjetaPrevision(datosDia){
     contPrevisiones.style.display = "flex";
 }
 
-function limpiarInfoPrevision(){
+function limpiarInfoPrevision() {
     const contPrevisiones = document.querySelector(".prevision");
     contPrevisiones.innerHTML = "";
 }
 
-function obtenerDia(){
+function obtenerDia() {
     const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dia = new Date().getDay();
@@ -144,7 +173,7 @@ function añadirCeros(i) {
     return i;
   }
 
-function obtenerHora(){
+function obtenerHora() {
     const d = new Date();
     let hora = añadirCeros(d.getHours());
     let minuto = añadirCeros(d.getMinutes());
@@ -152,33 +181,33 @@ function obtenerHora(){
     return time;
 }
 
-function limpiarInfoTiempo(){
-    const infoTiempo = document.querySelector(".info-tiempo"); 
+function limpiarInfoTiempo() {
+    const infoTiempo = document.querySelector(".info-tiempo");
     infoTiempo.innerHTML = "";
 }
 
-function mostrarLoader(){
+function mostrarLoader() {
     activarOverlay();
     const loader = document.querySelector(".loader");
     loader.style.visibility = "visible";
 }
 
-function ocultarLoader(){
+function ocultarLoader() {
     const loader = document.querySelector(".loader");
     loader.style.visibility = "hidden";
 }
 
-function activarOverlay(){
+function activarOverlay() {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
 }
 
-function desactivarOverlay(){
+function desactivarOverlay() {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "none";
 }
 
-function mostrarVentanaError(mensajeError){
+function mostrarVentanaError(mensajeError) {
     activarOverlay();
     const ventanaError = document.querySelector(".ventana-error");
     const mensaje = document.querySelector(".mensaje");
@@ -186,10 +215,56 @@ function mostrarVentanaError(mensajeError){
     ventanaError.style.visibility = "visible";
 }
 
-function cerrarVentanaError(){
+function cerrarVentanaError() {
     const ventanaError = document.querySelector(".ventana-error");
     ventanaError.style.visibility = "hidden";
     desactivarOverlay();
 }
 
-export {crearTarjetaTiempo, activarOverlay, desactivarOverlay, limpiarInfoPrevision, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError, crearTarjetaPrevision};
+function finalizarCarga() {
+    const loader = document.querySelector(".loader");
+    loader.style.visibility = "hidden";
+
+    if (document.querySelector(".ventana-error").style.visibility !== "visible") {
+        desactivarOverlay();
+    }
+}
+
+
+function mostrarResultadosBusqueda(ciudades) {
+    contenedorResultados.innerHTML = "";
+
+    ciudades.forEach((ciudad, indice) => {
+        const opcion = document.createElement("button");
+        opcion.type = "button";
+        opcion.classList.add("opcion-ciudad");
+
+        const nombre = document.createElement("span");
+        nombre.classList.add("nombre-ciudad");
+        nombre.textContent = ciudad.nombre;
+
+        const detalles = document.createElement("span");
+        detalles.classList.add("detalles-ciudad");
+
+        const ubicacion = [ciudad.region, ciudad.pais]
+            .filter(Boolean)
+            .join(", ");
+
+        detalles.textContent = ubicacion;
+
+        opcion.append(nombre, detalles);
+
+        opcion.dataset.indice = indice;
+
+        contenedorResultados.appendChild(opcion);
+    });
+
+    contenedorResultados.style.display = "block";
+}
+
+function ocultarResultadosBusqueda() {
+    contenedorResultados.style.display = "none";
+    contenedorResultados.innerHTML = "";
+}
+
+export {crearTarjetaTiempo, activarOverlay, desactivarOverlay, limpiarInfoPrevision, limpiarInfoTiempo, mostrarLoader, ocultarLoader, mostrarVentanaError, cerrarVentanaError, crearTarjetaPrevision, finalizarCarga, mostrarResultadosBusqueda, ocultarResultadosBusqueda};
